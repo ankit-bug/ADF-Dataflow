@@ -12,7 +12,15 @@
 					"name": "SourceData"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_GENDEST",
+						"type": "DatasetReference"
+					},
+					"name": "sinkdata"
+				}
+			],
 			"transformations": [
 				{
 					"name": "filtertherows"
@@ -36,7 +44,14 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true) ~> SourceData",
-				"SourceData filter(Year == 2020 && Product_Type == 'electronics') ~> filtertherows"
+				"SourceData filter(Year == 2014 && Product_Type == 'electronics') ~> filtertherows",
+				"filtertherows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkdata"
 			]
 		}
 	}
