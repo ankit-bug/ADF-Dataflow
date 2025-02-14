@@ -156,11 +156,11 @@
 				"typeProperties": {
 					"sources": [
 						{
-							"linkedService": {
-								"referenceName": "Ls_blobsa",
-								"type": "LinkedServiceReference"
+							"dataset": {
+								"referenceName": "DS_BLBSA",
+								"type": "DatasetReference"
 							},
-							"name": "SourceData"
+							"name": "source1"
 						}
 					],
 					"sinks": [
@@ -169,46 +169,47 @@
 								"referenceName": "DS_GENDEST",
 								"type": "DatasetReference"
 							},
-							"name": "sinkdata"
+							"name": "sink1"
 						}
 					],
 					"transformations": [
 						{
-							"name": "filtertherows"
+							"name": "select1"
+						},
+						{
+							"name": "sort1"
 						}
 					],
 					"scriptLines": [
 						"source(output(",
 						"          Country as string,",
-						"          Year as short,",
+						"          Year as string,",
 						"          Product_Type as string,",
-						"          Sales as short",
+						"          Sales as string",
 						"     ),",
-						"     useSchema: false,",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'delimited',",
-						"     container: 'destsa12',",
-						"     fileName: 'Sales_File_2014_2019_USA_UK_IND.csv',",
-						"     columnDelimiter: ',',",
-						"     escapeChar: '\\\\',",
-						"     quoteChar: '\\\"',",
-						"     columnNamesAsHeader: true) ~> SourceData",
-						"SourceData filter(Year == 2014 && Product_Type == 'electronics') ~> filtertherows",
-						"filtertherows sink(allowSchemaDrift: true,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 select(mapColumn(",
+						"          Country,",
+						"          Year,",
+						"          Product_Type",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sort(asc(Country, true)) ~> sort1",
+						"sort1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     rowUrlColumn:'Product_Type',",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkdata"
+						"     skipDuplicateMapOutputs: true) ~> sink1"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Ls_blobsa')]",
+				"[concat(variables('factoryId'), '/datasets/DS_BLBSA')]",
 				"[concat(variables('factoryId'), '/datasets/DS_GENDEST')]"
 			]
 		},
@@ -236,8 +237,8 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"SourceData": {},
-									"sinkdata": {}
+									"source1": {},
+									"sink1": {}
 								}
 							},
 							"staging": {},
