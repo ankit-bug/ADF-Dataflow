@@ -1,0 +1,43 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "Ls_blobsa",
+						"type": "LinkedServiceReference"
+					},
+					"name": "SourceData"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "filtertherows"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Country as string,",
+				"          Year as short,",
+				"          Product_Type as string,",
+				"          Sales as short",
+				"     ),",
+				"     useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delimited',",
+				"     container: 'destsa12',",
+				"     fileName: 'Sales_File_2014_2019_USA_UK_IND.csv',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true) ~> SourceData",
+				"SourceData filter(Year == 2020 && Product_Type == 'electronics') ~> filtertherows"
+			]
+		}
+	}
+}
