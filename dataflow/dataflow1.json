@@ -47,6 +47,7 @@
 				"SourceData filter(Year == 2014 && Product_Type == 'electronics') ~> filtertherows",
 				"filtertherows sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     rowUrlColumn:'Product_Type',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
