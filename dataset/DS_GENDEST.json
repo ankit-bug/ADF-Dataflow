@@ -1,0 +1,22 @@
+{
+	"name": "DS_GENDEST",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_GEN2SA",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "srcsa2"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
